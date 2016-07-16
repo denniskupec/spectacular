@@ -28,5 +28,3 @@ with NamedTemporaryFile(mode='w+b', suffix='.png') as image:
 	print(link)
 
 	subprocess.run(['xdg-open', link], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-
-
