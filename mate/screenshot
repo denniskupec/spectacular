@@ -1,0 +1,32 @@
+#!/usr/bin/env python3
+# shutter --no_session --select --output='/tmp/%R.png' --exit_after_capture
+# I didnt say it would be pretty
+
+import json, subprocess
+from sys import exit
+from tempfile import NamedTemporaryFile
+
+with NamedTemporaryFile(mode='w+b', suffix='.png') as image:
+	shutter = subprocess.run(['shutter', '--no_session', '--select', '--exit_after_capture', '--output=' + image.name], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+	if shutter.returncode != 0:
+		exit("Shutter failed somehow.")
+
+	#subprocess is easier, i dont like urllib and thank me you dont need to install requests
+	curl = subprocess.run(['curl', '-s', '--header', 'Authorization: Client-ID 087060a2a8fc5ac', 
+													'--form', 'image=@' + image.name,
+													'--form', 'type=file',
+													'--url', 'https://api.imgur.com/3/upload'], check=True, stdout=subprocess.PIPE)
+
+	if curl.returncode != 0:
+		exit("cURL failed the imgur upload, or the imgur API is broken.")
+
+	result = json.loads(curl.stdout.decode("utf-8"));
+
+	link = result["data"]["link"]
+
+	print(link)
+
+	subprocess.run(['xdg-open', link], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+
