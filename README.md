@@ -1,5 +1,5 @@
-## spectacle
+## spectacular
 
-Add this to your ```~/.bashrc``` as an alias or add a global hotkey.
+Modifying screenshot applications so they actually make screenshots.
 
-Takes a screenshot with KDE Spectacle -> uploads to Imgur -> opens in your browser
+Place your flavor inside ```/usr/local/bin``` (or wherever) and set a hotkey.
